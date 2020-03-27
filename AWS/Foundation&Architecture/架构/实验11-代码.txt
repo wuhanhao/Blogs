@@ -1,0 +1,17 @@
+<html>
+<head>My CloudFront Test</head>
+<body>
+<p>My text content goes here.</p>
+<p> <img src="http://<CloudFront domain name>/grand_canyon.jpg" alt="my test image" />
+</body>
+</html>
+
+
+
+<html>
+<head>My CloudFront Test</head>
+<body>
+<p>My text content goes here.</p>
+<p> <img src="http://<CloudFront domain name>/grand_canyon_v2.jpg" alt="my test image" />
+</body>
+</html>

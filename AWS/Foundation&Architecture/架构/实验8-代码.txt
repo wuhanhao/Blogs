@@ -1,0 +1,8 @@
+chmod 400 KEYPAIR.pem
+
+ssh -i KEYPAIR.pem ec2-user@EC2PublicIP
+
+wget https://us-west-2-tcprod.s3.amazonaws.com/courses/AWS-100-CCA/v3.1.13/lab8-ha/scripts/phpapp.zip
+
+
+sudo unzip phpapp.zip -d /var/www/html/

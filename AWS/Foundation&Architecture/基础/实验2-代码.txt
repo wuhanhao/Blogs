@@ -1,0 +1,13 @@
+chmod 400 <path and name of pem file>
+
+ssh -i <path and name of pem> ec2-user@<Public IP>
+
+sudo mkfs -t ext3 /dev/sdf
+
+sudo mkdir /mnt/data-store
+
+sudo mount /dev/sdf /mnt/data-store
+
+echo "/dev/sdf   /mnt/data-store ext3 defaults,noatime 1 2" | sudo tee -a /etc/fstab
+
+cat /etc/fstab

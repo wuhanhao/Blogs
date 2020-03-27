@@ -1,0 +1,111 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AccessWebsite",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::website*",
+                "arn:aws:s3:::website*/*"
+            ]
+        },
+        {
+            "Sid": "ListBuckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+
+
+
+
+
+#! /bin/bash
+yum -y update
+yum -y install httpd php php-mysql php-pdo php-ldap
+service httpd start
+chkconfig httpd on
+groupadd www
+usermod -a -G www ec2-user
+chown -R root:www /var/www
+chmod 2775 /var/www
+find /var/www -type d -exec chmod 2775 {} +
+find /var/www -type f -exec chmod 0664 {} +
+mkdir /var/www/html/app
+BUCKET=`aws s3api list-buckets --query "Buckets[?starts_with(Name, 'website')].Name | [0]" --output text`
+aws s3 cp s3://$BUCKET/repo/deploy/ /var/www/html/app/ --recursive
+cd /var/www/html/app
+unzip code.zip
+rm -r __MACOSX
+rm code.zip
+
+
+chmod 400 <path and name of pem file>
+
+ssh -i <path and name of pem> ec2-user@<Public IP>
+
+
+BUCKET=website-abc123
+
+aws s3 ls $BUCKET
+
+cd /var/www/html/app
+
+aws s3 cp images s3://$BUCKET/static --recursive --acl public-read
+
+aws s3 ls $BUCKET/static/
+
+cat header.php
+
+sudo sed -i "s/images\/AWS.png/https:\/\/$BUCKET.s3.amazonaws.com\/static\/AWS.png/g" header.php
+
+cat header.php
+
+sudo sed -i "s/images\/redrocks-/https:\/\/$BUCKET.s3.amazonaws.com\/static\/redrocks-/g" sample.css
+sudo sed -i "s/\.\.\/images/https:\/\/$BUCKET.s3.amazonaws.com\/static/g" sample.css
+
+sudo mv images images_old
+
+
+
+
+
+
+
+
+
+
+
+aws s3 cp . s3://$BUCKET/repo/prod --recursive
+
+
+#! /bin/bash
+yum -y update
+yum -y install httpd php php-mysql php-pdo php-ldap
+service httpd start
+chkconfig httpd on
+groupadd www
+usermod -a -G www ec2-user
+chown -R root:www /var/www
+chmod 2775 /var/www
+find /var/www -type d -exec chmod 2775 {} +
+find /var/www -type f -exec chmod 0664 {} +
+mkdir /var/www/html/app
+BUCKET=`aws s3api list-buckets --query "Buckets[?starts_with(Name, 'website-')].Name | [0]" --output text`
+aws s3 cp s3://$BUCKET/repo/prod/ /var/www/html/app/ --recursive
+cd /var/www/html/app
+unzip code.zip
+rm -r __MACOSX
+rm code.zip
